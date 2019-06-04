@@ -35,7 +35,6 @@ import {
 } from './types';
 import {
   RaidenState,
-  RaidenStateType,
   initialState,
   encodeRaidenState,
   decodeRaidenState,
@@ -304,7 +303,7 @@ export class Raiden {
         1000,
         { maxWait: 5000 },
       );
-    } else if (storageOrState && RaidenStateType.is(storageOrState)) {
+    } else if (storageOrState && RaidenState.is(storageOrState)) {
       loadedState = storageOrState;
     } else if (storageOrState /* typeof storageOrState === unknown */) {
       loadedState = decodeRaidenState(storageOrState);
