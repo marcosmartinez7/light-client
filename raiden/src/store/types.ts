@@ -88,7 +88,7 @@ export type PrivateKey = t.TypeOf<typeof PrivateKey>;
 
 const isAddress = (u: unknown): u is string => {
   try {
-    return getAddress(u as string) === u;
+    return typeof u === 'string' && getAddress(u) === u;
   } catch (e) {}
   return false;
 };
