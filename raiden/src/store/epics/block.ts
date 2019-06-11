@@ -2,7 +2,8 @@ import { ofType } from 'redux-observable';
 import { Observable } from 'rxjs';
 import { mergeMap, withLatestFrom } from 'rxjs/operators';
 
-import { RaidenState, ChannelState } from '../state';
+import { ChannelState } from '../../channels';
+import { RaidenState } from '../state';
 import {
   RaidenActionType,
   RaidenActions,

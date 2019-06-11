@@ -1,11 +1,12 @@
 import { cloneDeep, get, set, unset } from 'lodash';
 import { Zero } from 'ethers/constants';
 
-import { RaidenState, initialState, ChannelState, Channel } from './state';
+import { RaidenState, initialState } from './state';
 import { RaidenActions, RaidenActionType } from './actions';
+import { ChannelState, Channel } from '../channels';
 
 export function raidenReducer(
-  state: RaidenState = initialState,
+  state: Readonly<RaidenState> = initialState,
   action: RaidenActions,
 ): RaidenState {
   let channel: Channel;
@@ -25,16 +26,16 @@ export function raidenReducer(
       if (get(state, path)) return state; // there's already a channel with partner
       return set(cloneDeep(state), path, {
         state: ChannelState.opening,
-        totalDeposit: Zero,
-        partnerDeposit: Zero,
+        own: { deposit: Zero },
+        partner: { deposit: Zero },
       });
 
     case RaidenActionType.CHANNEL_OPENED:
       path = ['tokenNetworks', action.tokenNetwork, action.partner];
       channel = {
-        totalDeposit: Zero,
-        partnerDeposit: Zero,
         state: ChannelState.open,
+        own: { deposit: Zero },
+        partner: { deposit: Zero },
         id: action.id,
         settleTimeout: action.settleTimeout,
         openBlock: action.openBlock,
@@ -54,8 +55,9 @@ export function raidenReducer(
       channel = cloneDeep(get(state, path));
       if (!channel || channel.state !== ChannelState.open || channel.id !== action.id)
         return state;
-      if (action.participant === state.address) channel.totalDeposit = action.totalDeposit;
-      else if (action.participant === action.partner) channel.partnerDeposit = action.totalDeposit;
+      if (action.participant === state.address) channel.own.deposit = action.totalDeposit;
+      else if (action.participant === action.partner)
+        channel.partner.deposit = action.totalDeposit;
       else return state; // shouldn't happen, deposit from neither us or partner
       return set(cloneDeep(state), path, channel);
 

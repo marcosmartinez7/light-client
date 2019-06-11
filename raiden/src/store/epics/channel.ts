@@ -14,7 +14,8 @@ import { get, findKey } from 'lodash';
 import { HashZero, Zero } from 'ethers/constants';
 
 import { RaidenEpicDeps } from '../../types';
-import { RaidenState, Channel, ChannelState } from '../state';
+import { Channel, ChannelState } from '../../channels';
+import { RaidenState } from '../state';
 import {
   RaidenActionType,
   RaidenActions,
@@ -166,7 +167,7 @@ export const channelDepositEpic = (
             tokenNetworkContract.functions.setTotalDeposit(
               channelId,
               address,
-              state.tokenNetworks[action.tokenNetwork][action.partner].totalDeposit.add(
+              state.tokenNetworks[action.tokenNetwork][action.partner].own.deposit.add(
                 action.deposit,
               ),
               action.partner,

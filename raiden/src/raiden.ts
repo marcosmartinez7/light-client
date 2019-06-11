@@ -71,7 +71,6 @@ export class Raiden {
   public readonly network: Network;
   private readonly signer: Signer;
   private readonly store: Store<RaidenState, RaidenActions>;
-  private readonly contractsInfo: ContractsInfo;
   private contracts: RaidenContracts;
   private readonly tokenInfo: { [token: string]: TokenInfo } = {};
 
@@ -107,7 +106,6 @@ export class Raiden {
     this.signer = signer;
     const address = state.address;
 
-    this.contractsInfo = contractsInfo;
     this.contracts = {
       registry: new Contract(
         contractsInfo.TokenNetworkRegistry.address,

@@ -1,9 +1,11 @@
 import { bigNumberify } from 'ethers/utils';
+import * as t from 'io-ts';
 import {
   RaidenActionType,
   channelDeposit,
   channelDepositFailed,
   channelMonitored,
+  EnumType,
 } from 'raiden/store';
 
 describe('action factories not tested in reducers.spec.ts', () => {
@@ -43,5 +45,17 @@ describe('action factories not tested in reducers.spec.ts', () => {
       partner,
       error,
     });
+  });
+
+  test('bla', () => {
+    enum Test {
+      TEST = 'Test',
+    }
+    const TestC = new EnumType<Test>(Test, 'Test');
+    const Foo = t.type({ test: TestC });
+    type Foo = t.TypeOf<typeof Foo>;
+
+    const foo: Foo = { test: Test.TEST };
+    expect(foo).toEqual({ test: 'Test' });
   });
 });
