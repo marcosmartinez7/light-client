@@ -270,7 +270,7 @@ export const initMatrixEpic = (
         // ensure we joined discovery room
         mergeMap(() =>
           matrix.joinRoom(
-            `#raiden_${network.name || network.chainId}_discovery:${getServerName(server)}`,
+              `#raiden_${network.name || network.chainId}_discovery:${getServerName(server)}`,
           ),
         ),
         mapTo({ matrix, server, setup }),

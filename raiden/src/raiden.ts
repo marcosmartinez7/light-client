@@ -229,8 +229,11 @@ export class Raiden {
     } else {
       provider = new Web3Provider(connection);
     }
-    const network = await provider.getNetwork();
-
+    let network = await provider.getNetwork();
+    
+    if(network.name === "unknown"){
+      network.name = network.chainId.toString();
+    }
     // if no ContractsInfo, try to populate from defaults
     if (!contracts) {
       switch (network.name) {
@@ -246,9 +249,13 @@ export class Raiden {
         case 'goerli':
           contracts = goerliDeploy.contracts;
           break;
-        default:
+        case '31':
           contracts = regtestDeploy.contracts;
           break;
+        default:
+          throw new Error(
+              `No deploy info provided nor recognized network: ${JSON.stringify(network)}`,
+          );
       }
     }
 
